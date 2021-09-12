@@ -1,0 +1,44 @@
+# Approach 1: negative number cannot be palindrome and check if reverse positive number = itself.
+## Time Complexity : O(n); n = digits in number
+## Space Complexity : O(1)
+
+class Solution {
+public:
+    int reverse(int x) {
+        int ans = 0, last;
+        while (x != 0) {
+            last = x % 10;
+            x /= 10;
+            if (ans > INT_MAX/10 || (ans == INT_MAX / 10 && last > 7)) return 0;
+            if (ans < INT_MIN/10 || (ans == INT_MIN / 10 && last < -8)) return 0;
+            ans = ans * 10 + last;
+        }
+        return ans;
+    }
+    bool isPalindrome(int x) {
+        if(x < 0 || (x%10 == 0 && x !=0)) return 0;
+        int ans = reverse(x);
+        return ans == x;
+    }
+};
+
+# Approach 2: negative number cannot be palindrome and check whether 1st half of digits in number = 2nd half.
+## Time Complexity : O(n); n = digits in number
+## Space Complexity : O(1)
+
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        if(x < 0 || (x % 10 == 0 && x != 0)) return 0;
+
+        int second_half = 0;
+        while(x > second_half) {
+            second_half = second_half * 10 + x % 10;
+            x /= 10;
+        }
+        // if digits in x are even then we can check x == second_half
+        // otherwise we can check x == second_half/10 which will ignore the middle digit 
+        // eg. 123 - 321, here 2 can be ignore while checking for palindrome.
+        return x == second_half || x == second_half/10;
+    }
+};
